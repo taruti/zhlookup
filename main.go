@@ -1,3 +1,4 @@
+// zhlookup is a utility to grep CC-CEDICT Chinese dictionary.
 package main
 
 import (
