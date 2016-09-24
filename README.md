@@ -1,4 +1,4 @@
-# Zhlookup - Utility to grep CC-CEDICT dictionary in go
+# Zhlookup - Utility to grep CC-CEDICT dictionary
 
 Put (a link to) CC-CEDICT to `${HOME}/.zhlookup.dict`.
 

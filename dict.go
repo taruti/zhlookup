@@ -10,6 +10,7 @@ import (
 var home = os.Getenv(`HOME`)
 var cedictFilename = home + `/.zhlookup.dict`
 
+// Find performs the dictionary lookup.
 func Find(s string) ([]string, error) {
 	sbs := []byte(s)
 
