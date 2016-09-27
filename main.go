@@ -63,6 +63,9 @@ func console() error {
 			}
 			return err
 		}
+		if line == "" {
+			continue
+		}
 		err = findPrint(line)
 		if err != nil { // io.EOF
 			return err
