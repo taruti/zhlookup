@@ -14,6 +14,7 @@ var cedictFilename = home + `/.zhlookup.dict`
 func Find(s string) ([]string, error) {
 	sepQuery := len(s)>0 && isSeparator(s[0]) && isSeparator(s[len(s)-1])
 	sbs := []byte(s)
+	isLatinAlpha := isLatinAlphaString(sbs)
 
 	f, err := os.Open(cedictFilename)
 	if err != nil {
@@ -37,6 +38,9 @@ func Find(s string) ([]string, error) {
 			fmt.Printf("Non-standard entry: %q\n", bs)
 			continue
 		}
+		if isLatinAlpha {
+			toLowerLatin(bs)
+		}
 		matchIdx := bytes.Index(bs, sbs)
 		if matchIdx < 0 {
 			continue
@@ -52,6 +56,23 @@ func Find(s string) ([]string, error) {
 		}
 	}
 	return res, scanner.Err()
+}
+
+func isLatinAlphaString(bs []byte) bool {
+	for _,b := range bs {
+		if b > 0x7F || (b >= 'A' && b <= 'Z') {
+			return false
+		}
+	}
+	return true
+}
+
+func toLowerLatin(bs []byte) {
+	for i,b := range bs {
+		if b >= 'A' && b <= 'Z' {
+			bs[i]  += 'a'-'A'
+		}
+	}
 }
 
 func isSeparator(b byte) bool {
