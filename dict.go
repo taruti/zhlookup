@@ -40,7 +40,7 @@ func Find(s string) ([]string, error) {
 		if matchIdx < 0 {
 			continue
 		}
-		if (matchIdx == 0 || bs[matchIdx-1] == ' ') && (matchIdx+len(sbs) == len(bs) || bs[matchIdx+len(sbs)] == ' ') {
+		if (matchIdx == 0 || isSeparator(bs[matchIdx-1])) && (matchIdx+len(sbs) == len(bs) || isSeparator(bs[matchIdx+len(sbs)])) {
 			if !isExact {
 				res = nil
 				isExact = true
@@ -51,4 +51,8 @@ func Find(s string) ([]string, error) {
 		}
 	}
 	return res, scanner.Err()
+}
+
+func isSeparator(b byte) bool {
+	return b < 0x7F && (b < 'A' || b > 'Z') && (b < 'a' || b > 'z')
 }
