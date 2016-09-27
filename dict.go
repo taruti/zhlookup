@@ -12,6 +12,7 @@ var cedictFilename = home + `/.zhlookup.dict`
 
 // Find performs the dictionary lookup.
 func Find(s string) ([]string, error) {
+	sepQuery := len(s)>0 && isSeparator(s[0]) && isSeparator(s[len(s)-1])
 	sbs := []byte(s)
 
 	f, err := os.Open(cedictFilename)
@@ -41,7 +42,7 @@ func Find(s string) ([]string, error) {
 			continue
 		}
 		if (matchIdx == 0 || isSeparator(bs[matchIdx-1])) && (matchIdx+len(sbs) == len(bs) || isSeparator(bs[matchIdx+len(sbs)])) {
-			if !isExact {
+			if !isExact && !sepQuery {
 				res = nil
 				isExact = true
 			}
