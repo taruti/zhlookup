@@ -2,38 +2,28 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	"io"
-	"log"
 
-	"github.com/chzyer/readline"
+	"github.com/taruti/cli"
 )
 
+type zhlookup struct{}
+
 func main() {
-	flag.Parse()
-	err := mainWork()
-	if err != nil {
-		log.Fatal("ERROR", err)
-	}
+	cli.Main(zhlookup{})
 }
 
-func mainWork() error {
-	args := flag.Args()
-	for _, s := range args {
+func (zhlookup) HandleCliLine(s string) error {
+	return findPrint(s)
+}
+
+func (zhlookup) HandleCmdLine(ss []string) error {
+	for _, s := range ss {
 		err := findPrint(s)
 		if err != nil {
 			return err
 		}
 	}
-
-	if len(args) == 0 {
-		err := console()
-		if err != nil {
-			return err
-		}
-	}
-
 	return nil
 }
 
@@ -46,29 +36,4 @@ func findPrint(s string) error {
 		fmt.Println(line)
 	}
 	return nil
-}
-
-func console() error {
-	rl, err := readline.New("> ")
-	if err != nil {
-		return err
-	}
-	defer rl.Close()
-
-	for {
-		line, err := rl.Readline()
-		if err != nil {
-			if err == io.EOF {
-				return nil
-			}
-			return err
-		}
-		if line == "" {
-			continue
-		}
-		err = findPrint(line)
-		if err != nil { // io.EOF
-			return err
-		}
-	}
 }
